@@ -1,0 +1,8 @@
+# Keep npm packages out of version control
+node_modules
+
+# Keep environment variables out of version control
+.env
+
+# Keep generated Prisma code out of version control
+/generated/prisma
