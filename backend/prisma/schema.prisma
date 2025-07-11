@@ -13,3 +13,48 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique @db.VarChar(255)
+  password  String   @db.VarChar(255)
+  username  String   @unique @db.VarChar(20)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  games     Game[]
+}
+
+model Game {
+  id        Int      @id @default(autoincrement())
+  score     Int      @default(0)
+  code      String   @unique @default(nanoid(6))
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  frames    Frame[]
+
+  @@index([userId])
+}
+
+model Frame {
+  id                  Int      @id @default(autoincrement())
+  number              Int
+  firstPinsKnocked    Int
+  secondPinsKnocked   Int?
+  thirdPinsKnocked    Int?
+  score               Int?
+  firstPinsRemaining  String   @db.VarChar(20)
+  secondPinsRemaining String?  @db.VarChar(20)
+  thirdPinsRemaining  String?  @db.VarChar(20)
+  spareCase           String?  @db.VarChar(20)
+  isStrike            Boolean
+  isSpare             Boolean
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  game                Game     @relation(fields: [gameId], references: [id])
+  gameId              Int
+
+  @@unique([gameId, number])
+  @@index([gameId])
+}
