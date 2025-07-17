@@ -6,3 +6,6 @@ node_modules
 
 # Keep generated Prisma code out of version control
 /generated/prisma
+
+# Keep transpiled code out of version control
+dist/
