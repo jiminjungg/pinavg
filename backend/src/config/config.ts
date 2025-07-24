@@ -2,10 +2,11 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-interface Config {
+interface APIConfig {
   port: number;
   nodeEnv: string;
   databaseUrl: string;
+  jwtSecret: string;
 }
 
 function getDatabaseUrl() {
@@ -22,8 +23,16 @@ function getDatabaseUrl() {
     : process.env.DATABASE_URL;
 }
 
-export const config: Config = {
+function getJwtSecret() {
+  if (!process.env.JWT_SECRET) {
+    throw new Error("JWT_SECRET is required in .env");
+  }
+  return process.env.JWT_SECRET;
+}
+
+export const config: APIConfig = {
   port: Number(process.env.PORT) || 3000,
   nodeEnv: process.env.NODE_ENV || "development",
   databaseUrl: getDatabaseUrl(),
+  jwtSecret: getJwtSecret(),
 };
